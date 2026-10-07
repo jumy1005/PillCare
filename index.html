@@ -86,7 +86,8 @@
        </div>
       </aside>
      </div>
-     <div id="today-med-list" class="mt-8 space-y-4"></div>
+
+     <div id="today-med-list" class="mt-8 space-y-8"></div>
     </section>
 
     <!-- ADD VIEW -->
@@ -94,12 +95,21 @@
      <div class="mx-auto max-w-2xl">
       <p class="mb-2 text-sm font-bold uppercase tracking-[.13em] text-[#25765f]">เพิ่มข้อมูลยา</p>
       <h2 class="m-0 font-['Fraunces'] text-3xl font-bold">ลงทะเบียนยาใหม่</h2>
-      <p class="mb-7 mt-3 leading-relaxed text-[#58746a]">กรอกข้อมูลยาและเวลาที่ต้องทาน เพื่อให้ระบบช่วยเตือนคุณได้ตรงเวลา</p>
+      <p class="mb-7 mt-3 leading-relaxed text-[#58746a]">กรอกข้อมูลยาและเลือกมื้อยาที่ต้องทาน เพื่อให้ระบบช่วยเตือนคุณได้ตรงเวลา</p>
       <form id="medication-form" class="rounded-[28px] bg-white p-5 border border-[#d6e3dc] shadow-[0_16px_45px_rgba(25,75,59,.09)] sm:p-8">
        <div class="grid gap-5 sm:grid-cols-2">
         <div class="sm:col-span-2">
          <label class="mb-2 block text-sm font-bold" for="med-name">ชื่อยา</label> 
          <input id="med-name" required type="text" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3 text-[#17342f]" placeholder="เช่น วิตามินดี, ยาลดไขมัน">
+        </div>
+        <div>
+         <label class="mb-2 block text-sm font-bold" for="med-category">ประเภทมื้อยา</label> 
+         <select id="med-category" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3 text-[#17342f]"> 
+          <option value="morning">☀️ ยาเช้า</option>
+          <option value="midday">🌤️ ยากลางวัน</option>
+          <option value="evening">🌆 ยาเย็น</option>
+          <option value="night">🌙 ก่อนนอน / อื่นๆ</option> 
+         </select>
         </div>
         <div>
          <label class="mb-2 block text-sm font-bold" for="med-form">รูปแบบยา</label> 
@@ -115,15 +125,16 @@
          <input id="med-dosage" required type="text" value="1 เม็ด" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3 text-[#17342f]">
         </div>
         <div>
-         <label class="mb-2 block text-sm font-bold" for="med-timing">ช่วงเวลาทาน</label> 
+         <label class="mb-2 block text-sm font-bold" for="med-timing">เงื่อนไขการทาน</label> 
          <select id="med-timing" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3 text-[#17342f]"> 
+          <option>หลังอาหารทันที</option>
+          <option>หลังอาหาร</option>
           <option>ก่อนอาหาร</option>
-          <option selected>หลังอาหาร</option>
           <option>พร้อมอาหาร</option>
           <option>ก่อนนอน</option> 
          </select>
         </div>
-        <div>
+        <div class="sm:col-span-2">
          <label class="mb-2 block text-sm font-bold" for="med-time">เวลาเตือน</label> 
          <input id="med-time" required type="time" value="08:00" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3 text-[#17342f]">
         </div>
@@ -194,10 +205,10 @@
        </div>
        <div class="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-[#d7e5de] bg-[#f8fdf9] p-4">
         <div>
-         <label class="block text-sm font-bold">ขอสิทธิ์แจ้งเตือนเบราว์เซอร์</label>
-         <p class="mb-0 mt-1 text-sm leading-relaxed text-[#58746a]">ส่งการแจ้งเตือนผ่านระบบ OS ของอุปกรณ์</p>
+         <label class="block text-sm font-bold">ทดสอบเสียงเตือนภาษาไทยใน Chrome</label>
+         <p class="mb-0 mt-1 text-sm leading-relaxed text-[#58746a]">กดปุ่มเพื่อทดสอบระบบเสียงสังเคราะห์ภาษาไทย</p>
         </div>
-        <button id="request-perm-btn" type="button" class="rounded-xl bg-[#25765f] px-3 py-2 text-xs font-bold text-white">อนุญาตสิทธิ์</button>
+        <button id="test-sound-btn" type="button" class="rounded-xl bg-[#25765f] px-4 py-2 text-xs font-bold text-white hover:bg-[#17342f]">🗣️ ทดสอบเสียง</button>
        </div>
        <button type="submit" class="bg-[#17342f] text-white mt-6 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-bold transition hover:bg-[#25765f]"> 
         บันทึกการตั้งค่า
@@ -225,6 +236,15 @@
       <input id="edit-name" required type="text" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3">
      </div>
      <div>
+      <label for="edit-category" class="mb-2 block text-sm font-bold">ประเภทมื้อยา</label> 
+      <select id="edit-category" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3"> 
+       <option value="morning">☀️ ยาเช้า</option>
+       <option value="midday">🌤️ ยากลางวัน</option>
+       <option value="evening">🌆 ยาเย็น</option>
+       <option value="night">🌙 ก่อนนอน / อื่นๆ</option> 
+      </select>
+     </div>
+     <div>
       <label for="edit-form-type" class="mb-2 block text-sm font-bold">รูปแบบยา</label> 
       <select id="edit-form-type" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3"> 
         <option>💊 เม็ด</option>
@@ -240,13 +260,14 @@
      <div>
       <label for="edit-timing" class="mb-2 block text-sm font-bold">ช่วงเวลาทาน</label> 
       <select id="edit-timing" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3"> 
-        <option>ก่อนอาหาร</option>
+        <option>หลังอาหารทันที</option>
         <option>หลังอาหาร</option>
+        <option>ก่อนอาหาร</option>
         <option>พร้อมอาหาร</option>
         <option>ก่อนนอน</option> 
       </select>
      </div>
-     <div>
+     <div class="sm:col-span-2">
       <label for="edit-time" class="mb-2 block text-sm font-bold">เวลาเตือน</label> 
       <input id="edit-time" required type="time" class="w-full rounded-xl border border-[#c9ded5] bg-white px-4 py-3">
      </div>
@@ -277,12 +298,18 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    // --- APP DATA & INITIALIZATION ---
+    const CATEGORIES = {
+      morning: { title: "☀️ ยาเช้า", color: "border-amber-200 bg-amber-50/50", badge: "bg-amber-100 text-amber-800" },
+      midday: { title: "🌤️ ยากลางวัน", color: "border-sky-200 bg-sky-50/50", badge: "bg-sky-100 text-sky-800" },
+      evening: { title: "🌆 ยาเย็น", color: "border-orange-200 bg-orange-50/50", badge: "bg-orange-100 text-orange-800" },
+      night: { title: "🌙 ก่อนนอน / อื่นๆ", color: "border-indigo-200 bg-indigo-50/50", badge: "bg-indigo-100 text-indigo-800" }
+    };
+
     let meds = JSON.parse(localStorage.getItem('pillcare_meds')) || [
-      { id:"med_1", name:"พาราเซตามอล (Paracetamol)", form:"💊 เม็ด", dosage:"1 เม็ด", timing:"หลังอาหารทันที", time:"08:00" },
-      { id:"med_2", name:"วิตามินซี", form:"💊 เม็ด", dosage:"1 เม็ด", timing:"หลังอาหาร", time:"12:00" },
-      { id:"med_3", name:"ยาลดความดัน (Amlodipine)", form:"💊 เม็ด", dosage:"1 เม็ด", timing:"หลังอาหาร", time:"18:00" },
-      { id:"med_4", name:"ยาน้ำแก้ไอ", form:"🧪 น้ำ", dosage:"1 ช้อนชา", timing:"ก่อนนอน", time:"21:00" }
+      { id:"med_1", name:"พาราเซตามอล (Paracetamol)", category:"morning", form:"💊 เม็ด", dosage:"1 เม็ด", timing:"หลังอาหารทันที", time:"08:00" },
+      { id:"med_2", name:"วิตามินซี", category:"midday", form:"💊 เม็ด", dosage:"1 เม็ด", timing:"หลังอาหาร", time:"12:00" },
+      { id:"med_3", name:"ยาลดความดัน (Amlodipine)", category:"evening", form:"💊 เม็ด", dosage:"1 เม็ด", timing:"หลังอาหาร", time:"18:00" },
+      { id:"med_4", name:"ยาน้ำแก้ไอ", category:"night", form:"🧪 น้ำ", dosage:"1 ช้อนชา", timing:"ก่อนนอน", time:"21:00" }
     ];
 
     let historyLog = JSON.parse(localStorage.getItem('pillcare_history')) || {};
@@ -293,6 +320,90 @@
     let activeReminderId = null;
     let lastCheckedMinute = "";
     let deferredPrompt = null;
+
+    // --- AUDIO & SPEECH ENGINE IMPROVEMENTS FOR GOOGLE CHROME ---
+    let audioCtx = null;
+    let thaiVoice = null;
+
+    function unlockAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.resume();
+        loadThaiVoice();
+      }
+    }
+
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio);
+
+    function loadThaiVoice() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      thaiVoice = voices.find(v => 
+        v.lang === 'th-TH' || 
+        v.lang === 'th_TH' || 
+        v.lang.toLowerCase().includes('th') ||
+        v.name.toLowerCase().includes('thai')
+      );
+    }
+
+    if ('speechSynthesis' in window) {
+      loadThaiVoice();
+      window.speechSynthesis.onvoiceschanged = loadThaiVoice;
+    }
+
+    function playChime() {
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
+        if (audioCtx) {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); 
+          osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); 
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.6);
+        }
+      } catch (e) {
+        console.log("Audio play error:", e);
+      }
+    }
+
+    function playSpeechReminder(text = "อย่าลืมกินยานะครับ") {
+      playChime();
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+
+        setTimeout(() => {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'th-TH';
+          utterance.rate = 0.9;
+          utterance.pitch = 1.0;
+
+          if (!thaiVoice) loadThaiVoice();
+          if (thaiVoice) utterance.voice = thaiVoice;
+
+          window.speechSynthesis.speak(utterance);
+        }, 300);
+      }
+    }
 
     function saveState() {
       localStorage.setItem('pillcare_meds', JSON.stringify(meds));
@@ -324,7 +435,6 @@
       return timeStr ? `${timeStr} น.` : '';
     }
 
-    // --- RENDER HOME VIEW ---
     function renderHome() {
       document.getElementById("home-greeting").textContent = `สวัสดีครับ คุณ${displayName} 👋`;
       document.getElementById("display-name").value = displayName;
@@ -334,28 +444,52 @@
       const todayKey = getTodayKey();
       if (!historyLog[todayKey]) historyLog[todayKey] = {};
 
-      meds.forEach(med => {
-        const taken = !!historyLog[todayKey][med.id];
-        const card = document.createElement("article");
-        card.className = "med-card bg-white p-5 flex flex-wrap items-center justify-between gap-4 transition hover:shadow-md";
-        card.innerHTML = `
-          <div class="flex items-center gap-4">
-            <div class="time-dot bg-[#25765f]"></div>
-            <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-[#58746a]">เวลา: ${formatTime(med.time)}</span>
-              <h3 class="m-0 text-lg font-bold text-[#17342f] mt-0.5">${med.form} ${med.name}</h3>
-              <p class="m-0 text-sm text-[#58746a] mt-1">ปริมาณ: ${med.dosage} · ${med.timing}</p>
-            </div>
+      if (meds.length === 0) {
+        listContainer.innerHTML = `<p class="text-center p-8 text-[#58746a] bg-white rounded-2xl border border-dashed border-[#c9ded5]">ยังไม่มีรายการยาในระบบ กดปุ่ม "+ เพิ่มยา" ด้านบนเพื่อเริ่มบันทึก</p>`;
+        updateHomeProgress();
+        return;
+      }
+
+      Object.keys(CATEGORIES).forEach(catKey => {
+        const catMeds = meds.filter(m => (m.category || 'morning') === catKey);
+        if (catMeds.length === 0) return;
+
+        const catInfo = CATEGORIES[catKey];
+        const section = document.createElement("section");
+        section.className = `rounded-[24px] border p-5 sm:p-6 ${catInfo.color}`;
+
+        let itemsHtml = "";
+        catMeds.forEach(med => {
+          const taken = !!historyLog[todayKey][med.id];
+          itemsHtml += `
+            <article class="med-card bg-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 mt-3">
+              <div class="flex items-center gap-4">
+                <div class="time-dot bg-[#25765f]"></div>
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wider text-[#58746a]">เวลาเตือน ${formatTime(med.time)}</span>
+                  <h3 class="m-0 text-lg font-bold text-[#17342f] mt-0.5">${med.form} ${med.name}</h3>
+                  <p class="m-0 text-sm text-[#58746a] mt-1">ปริมาณ: ${med.dosage} · ${med.timing}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="openEditModal('${med.id}')" class="rounded-xl border border-[#c9ded5] px-3 py-2 text-sm font-bold text-[#58746a] hover:bg-[#e8f4ee]">แก้ไข</button>
+                <button type="button" onclick="deleteMed('${med.id}')" class="rounded-xl border border-[#efc9c2] px-3 py-2 text-sm font-bold text-[#b84738] hover:bg-[#ffebe8]">ลบ</button>
+                <button type="button" onclick="toggleMedState('${med.id}')" class="rounded-xl px-4 py-2 text-sm font-bold transition ${taken ? 'bg-[#e8f4ee] text-[#25765f]' : 'bg-[#17342f] text-white hover:bg-[#25765f]'}">
+                  ${taken ? '✓ ทานแล้ว' : 'กดบันทึกทานยา'}
+                </button>
+              </div>
+            </article>
+          `;
+        });
+
+        section.innerHTML = `
+          <div class="flex items-center justify-between">
+            <h3 class="m-0 font-['Fraunces'] text-xl font-bold text-[#17342f]">${catInfo.title}</h3>
+            <span class="rounded-full px-3 py-1 text-xs font-bold ${catInfo.badge}">${catMeds.length} รายการ</span>
           </div>
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="openEditModal('${med.id}')" class="rounded-xl border border-[#c9ded5] px-3 py-2 text-sm font-bold text-[#58746a] hover:bg-[#e8f4ee]">แก้ไข</button>
-            <button type="button" onclick="deleteMed('${med.id}')" class="rounded-xl border border-[#efc9c2] px-3 py-2 text-sm font-bold text-[#b84738] hover:bg-[#ffebe8]">ลบ</button>
-            <button type="button" onclick="toggleMedState('${med.id}')" class="rounded-xl px-4 py-2 text-sm font-bold transition ${taken ? 'bg-[#e8f4ee] text-[#25765f]' : 'bg-[#17342f] text-white hover:bg-[#25765f]'}">
-              ${taken ? '✓ ทานแล้ว' : 'กดบันทึกทานยา'}
-            </button>
-          </div>
+          <div class="space-y-3">${itemsHtml}</div>
         `;
-        listContainer.appendChild(card);
+        listContainer.appendChild(section);
       });
 
       updateHomeProgress();
@@ -395,7 +529,6 @@
       }
     }
 
-    // --- RENDER STATS VIEW ---
     function renderStats() {
       const days = ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."];
       const today = new Date();
@@ -444,12 +577,12 @@
       else praise.textContent = "เริ่มต้นใช้งาน!";
     }
 
-    // --- MODAL & EDIT LOGIC ---
     function openEditModal(id) {
       const med = meds.find(m => m.id === id);
       if (!med) return;
       document.getElementById("edit-id").value = med.id;
       document.getElementById("edit-name").value = med.name;
+      document.getElementById("edit-category").value = med.category || 'morning';
       document.getElementById("edit-form-type").value = med.form;
       document.getElementById("edit-dosage").value = med.dosage;
       document.getElementById("edit-timing").value = med.timing;
@@ -459,37 +592,6 @@
 
     function closeEditModal() {
       document.getElementById("edit-modal").classList.remove("visible");
-    }
-
-    // --- SOUND & SPEECH REMINDER ENGINE ---
-    function playAudioBeep() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.3);
-      } catch (e) {
-        console.log("Audio not allowed yet", e);
-      }
-    }
-
-    function playSpeechReminder(text = "อย่าลืมกินยานะครับ") {
-      playAudioBeep();
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'th-TH';
-        utterance.rate = 0.95;
-        window.speechSynthesis.speak(utterance);
-      }
     }
 
     function checkReminders() {
@@ -514,13 +616,6 @@
           document.getElementById("notification-modal").classList.add("visible");
 
           playSpeechReminder(`อย่าลืมกินยานะครับ ถึงเวลาทาน ${med.name} แล้วครับ`);
-
-          if ("Notification" in window && Notification.permission === "granted") {
-            new Notification("PillCare เตือนกินยา", {
-              body: `ถึงเวลาทาน ${med.name} (${med.dosage}) แล้วครับ`,
-              icon: "💊"
-            });
-          }
         }
       });
     }
@@ -540,6 +635,7 @@
         const newMed = {
           id: `med_${Date.now()}`,
           name: document.getElementById("med-name").value,
+          category: document.getElementById("med-category").value,
           form: document.getElementById("med-form").value,
           dosage: document.getElementById("med-dosage").value,
           timing: document.getElementById("med-timing").value,
@@ -550,8 +646,6 @@
         renderHome();
         showToast(`เพิ่มรายการยา ${newMed.name} เรียบร้อยแล้ว`);
         e.target.reset();
-        document.getElementById("med-dosage").value = "1 เม็ด";
-        document.getElementById("med-time").value = "08:00";
         switchView("home-view");
       });
 
@@ -561,6 +655,7 @@
         const med = meds.find(m => m.id === id);
         if (med) {
           med.name = document.getElementById("edit-name").value;
+          med.category = document.getElementById("edit-category").value;
           med.form = document.getElementById("edit-form-type").value;
           med.dosage = document.getElementById("edit-dosage").value;
           med.timing = document.getElementById("edit-timing").value;
@@ -583,10 +678,12 @@
         showToast("บันทึกการตั้งค่าเรียบร้อยแล้ว");
       });
 
+      document.getElementById("test-sound-btn").onclick = () => {
+        playSpeechReminder("อย่าลืมกินยานะครับ ระบบเสียงเตือนภาษาไทยพร้อมใช้งานแล้วครับ");
+      };
+
       document.getElementById("modal-taken").onclick = () => {
-        if (activeReminderId) {
-          toggleMedState(activeReminderId);
-        }
+        if (activeReminderId) toggleMedState(activeReminderId);
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         document.getElementById("notification-modal").classList.remove("visible");
       };
@@ -597,18 +694,8 @@
       };
 
       document.getElementById("modal-play-sound").onclick = () => {
-        playSpeechReminder("อย่าลืมกินยานะครับ");
-      };
-
-      document.getElementById("request-perm-btn").onclick = () => {
-        if ("Notification" in window) {
-          Notification.requestPermission().then(permission => {
-            if (permission === "granted") showToast("การแจ้งเตือนเบราว์เซอร์เปิดใช้งานแล้ว");
-            else showToast("ไม่ได้รับการอนุญาตการแจ้งเตือน");
-          });
-        } else {
-          showToast("เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือนระบบ");
-        }
+        const med = meds.find(m => m.id === activeReminderId);
+        playSpeechReminder(med ? `อย่าลืมกินยานะครับ ถึงเวลาทาน ${med.name} แล้วครับ` : "อย่าลืมกินยานะครับ");
       };
 
       document.getElementById("reset-stats-btn").onclick = () => {
@@ -618,21 +705,6 @@
           renderHome();
           renderStats();
           showToast("รีเซ็ตสถิติเรียบร้อยแล้ว");
-        }
-      };
-
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        document.getElementById("pwa-install-btn").style.display = "flex";
-      });
-
-      document.getElementById("pwa-install-btn").onclick = () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-        } else {
-          showToast("สามารถเลือก 'เพิ่มไปยังหน้าจอโฮม' จากเมนูเบราว์เซอร์ได้ทันที");
         }
       };
     });
