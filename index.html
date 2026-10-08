@@ -38,6 +38,12 @@
     .setting-switch::after { content:""; width:21px; height:21px; border-radius:50%; background:#fff; position:absolute; top:3px; left:3px; transition:.2s; box-shadow:0 2px 4px rgba(0,0,0,.16); }
     .setting-switch:checked { background:var(--leaf); }
     .setting-switch:checked::after { left:24px; }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(215, 93, 76, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(215, 93, 76, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(215, 93, 76, 0); }
+    }
+    .alarm-active-icon { animation: pulse-ring 1.5s infinite; }
   </style>
  </head>
  <body>
@@ -205,10 +211,10 @@
        </div>
        <div class="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-[#d7e5de] bg-[#f8fdf9] p-4">
         <div>
-         <label class="block text-sm font-bold">ทดสอบเสียงเตือนภาษาไทยใน Chrome</label>
-         <p class="mb-0 mt-1 text-sm leading-relaxed text-[#58746a]">กดปุ่มเพื่อทดสอบระบบเสียงสังเคราะห์ภาษาไทย</p>
+         <label class="block text-sm font-bold">ทดสอบเสียงเตือนวนลูปภาษาไทย</label>
+         <p class="mb-0 mt-1 text-sm leading-relaxed text-[#58746a]">กดปุ่มเพื่อทดสอบระบบเสียงเตือนที่จะดังไม่หยุดจนกว่าจะกดปิด</p>
         </div>
-        <button id="test-sound-btn" type="button" class="rounded-xl bg-[#25765f] px-4 py-2 text-xs font-bold text-white hover:bg-[#17342f]">🗣️ ทดสอบเสียง</button>
+        <button id="test-sound-btn" type="button" class="rounded-xl bg-[#25765f] px-4 py-2 text-xs font-bold text-white hover:bg-[#17342f]">🗣️ ทดสอบเสียงเตือนวนลูป</button>
        </div>
        <button type="submit" class="bg-[#17342f] text-white mt-6 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-bold transition hover:bg-[#25765f]"> 
         บันทึกการตั้งค่า
@@ -279,18 +285,18 @@
    </div>
   </div>
 
-  <!-- NOTIFICATION MODAL -->
+  <!-- NOTIFICATION MODAL (PERSISTENT & CONTINUOUS ALARM) -->
   <div id="notification-modal" class="modal-backdrop">
    <div class="modal-card bg-white p-6 text-center sm:p-8">
-    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#fff1cf] text-3xl">🔔</div>
-    <h2 class="mb-1 mt-5 font-['Fraunces'] text-2xl font-bold">ถึงเวลาทานยาแล้วครับ!</h2>
-    <p id="modal-medication" class="mb-1 mt-3 text-xl font-bold text-[#25765f]">💊 พาราเซตามอล</p>
-    <p id="modal-dose" class="m-0 text-[#58746a]">ปริมาณ: 1 เม็ด (หลังอาหาร)</p>
+    <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#ffebe8] text-4xl text-[#d75d4c] alarm-active-icon">🔔</div>
+    <h2 class="mb-1 mt-5 font-['Fraunces'] text-2xl font-bold text-[#d75d4c]">ถึงเวลาทานยาแล้วครับ!</h2>
+    <p class="text-xs font-bold text-[#b84738] uppercase tracking-wider mb-2">🚨 เสียงเตือนจะดังไม่หยุดจนกว่าจะกดปิด</p>
+    <p id="modal-medication" class="mb-1 mt-3 text-2xl font-bold text-[#25765f]">💊 พาราเซตามอล</p>
+    <p id="modal-dose" class="m-0 text-base font-semibold text-[#58746a]">ปริมาณ: 1 เม็ด (หลังอาหาร)</p>
     <div id="modal-time-box" class="mt-5 rounded-2xl bg-[#f8f5ed] px-4 py-3 font-bold text-[#17342f]">⏰ เวลา 08:00 น.</div>
     <div class="mt-6 grid gap-3">
-     <button id="modal-play-sound" type="button" class="bg-[#e8f4ee] text-[#25765f] rounded-xl px-5 py-3 font-bold">🗣️ ฟังเสียงเตือนซ้ำ</button> 
-     <button id="modal-taken" type="button" class="bg-[#25765f] text-white rounded-xl px-5 py-3.5 font-bold">✓ ทานยาเรียบร้อยแล้ว</button> 
-     <button id="modal-close" type="button" class="bg-[#f4faf6] text-[#58746a] rounded-xl px-5 py-3 font-bold">ปิดหน้าต่าง</button>
+     <button id="modal-taken" type="button" class="bg-[#25765f] text-white rounded-xl px-5 py-4 text-base font-bold shadow-lg hover:bg-[#17342f] transition">✓ ทานยาเรียบร้อยแล้ว (ปิดเสียงเตือน)</button> 
+     <button id="modal-close" type="button" class="bg-[#fff1cf] text-[#8a5d00] rounded-xl px-5 py-3.5 font-bold hover:bg-[#ffe59e]">🔕 ปิดเสียงและหน้าต่างเตือน</button>
     </div>
    </div>
   </div>
@@ -321,9 +327,12 @@
     let lastCheckedMinute = "";
     let deferredPrompt = null;
 
-    // --- AUDIO & SPEECH ENGINE IMPROVEMENTS FOR GOOGLE CHROME ---
+    // --- CONTINUOUS ALARM ENGINE & AUDIO CONTROL ---
     let audioCtx = null;
     let thaiVoice = null;
+    let alarmIntervalId = null;
+    let isAlarmActive = false;
+    let currentReminderText = "อย่าลืมกินยานะครับ";
 
     function unlockAudio() {
       if (!audioCtx) {
@@ -358,7 +367,7 @@
       window.speechSynthesis.onvoiceschanged = loadThaiVoice;
     }
 
-    function playChime() {
+    function playBeepSound() {
       try {
         if (!audioCtx) {
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -370,38 +379,64 @@
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); 
-          osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15); 
-          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+          osc.frequency.setValueAtTime(783.99, audioCtx.currentTime); // G5
+          osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.12); // C6
+          gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start();
-          osc.stop(audioCtx.currentTime + 0.6);
+          osc.stop(audioCtx.currentTime + 0.5);
         }
-      } catch (e) {
-        console.log("Audio play error:", e);
-      }
+      } catch (e) {}
     }
 
-    function playSpeechReminder(text = "อย่าลืมกินยานะครับ") {
-      playChime();
-
+    function playSpeechOnce(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         if (window.speechSynthesis.paused) window.speechSynthesis.resume();
 
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'th-TH';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.0;
+
+        if (!thaiVoice) loadThaiVoice();
+        if (thaiVoice) utterance.voice = thaiVoice;
+
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // เริ่มระบบเสียงเตือนวนลูปจนกว่าจะปิด
+    function startContinuousAlarm(text) {
+      stopContinuousAlarm(); // เคลียร์ของเก่าก่อน
+      isAlarmActive = true;
+      currentReminderText = text;
+
+      // สั่งเล่นทันทีครั้งแรก
+      playBeepSound();
+      setTimeout(() => { if (isAlarmActive) playSpeechOnce(currentReminderText); }, 300);
+
+      // วนลูปเล่นเสียงกระดิ่งและเสียงพูดทุกๆ 4.5 วินาที
+      alarmIntervalId = setInterval(() => {
+        if (!isAlarmActive) return;
+        playBeepSound();
         setTimeout(() => {
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'th-TH';
-          utterance.rate = 0.9;
-          utterance.pitch = 1.0;
-
-          if (!thaiVoice) loadThaiVoice();
-          if (thaiVoice) utterance.voice = thaiVoice;
-
-          window.speechSynthesis.speak(utterance);
+          if (isAlarmActive) playSpeechOnce(currentReminderText);
         }, 300);
+      }, 4500);
+    }
+
+    // หยุดเสียงเตือนทั้งหมด
+    function stopContinuousAlarm() {
+      isAlarmActive = false;
+      if (alarmIntervalId) {
+        clearInterval(alarmIntervalId);
+        alarmIntervalId = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
       }
     }
 
@@ -615,7 +650,8 @@
           document.getElementById("modal-time-box").textContent = `⏰ เวลาทาน: ${formatTime(med.time)}`;
           document.getElementById("notification-modal").classList.add("visible");
 
-          playSpeechReminder(`อย่าลืมกินยานะครับ ถึงเวลาทาน ${med.name} แล้วครับ`);
+          // เริ่มต้นเล่นเสียงเตือนซ้ำวนลูป
+          startContinuousAlarm(`อย่าลืมกินยานะครับ ถึงเวลาทาน ${med.name} แล้วครับ`);
         }
       });
     }
@@ -679,23 +715,22 @@
       });
 
       document.getElementById("test-sound-btn").onclick = () => {
-        playSpeechReminder("อย่าลืมกินยานะครับ ระบบเสียงเตือนภาษาไทยพร้อมใช้งานแล้วครับ");
+        document.getElementById("modal-medication").textContent = "💊 ยาสำหรับทดสอบระบบ";
+        document.getElementById("modal-dose").textContent = "ปริมาณ: 1 เม็ด (ทดสอบ)";
+        document.getElementById("modal-time-box").textContent = "⏰ เวลาทดสอบระบบเตือน";
+        document.getElementById("notification-modal").classList.add("visible");
+        startContinuousAlarm("อย่าลืมกินยานะครับ นี่คือการทดสอบระบบเสียงเตือนวนลูปครับ");
       };
 
       document.getElementById("modal-taken").onclick = () => {
         if (activeReminderId) toggleMedState(activeReminderId);
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopContinuousAlarm();
         document.getElementById("notification-modal").classList.remove("visible");
       };
 
       document.getElementById("modal-close").onclick = () => {
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopContinuousAlarm();
         document.getElementById("notification-modal").classList.remove("visible");
-      };
-
-      document.getElementById("modal-play-sound").onclick = () => {
-        const med = meds.find(m => m.id === activeReminderId);
-        playSpeechReminder(med ? `อย่าลืมกินยานะครับ ถึงเวลาทาน ${med.name} แล้วครับ` : "อย่าลืมกินยานะครับ");
       };
 
       document.getElementById("reset-stats-btn").onclick = () => {
